@@ -1,12 +1,20 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
+require("dotenv").config();
 
 // Initialization
 const app = express();
 
 // Database Config
-// mongoose.connect(process.env.MONGO_URI, () => console.log("Connected to DB"));
+mongoose.connect(
+  process.env.MONGO_URI,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  },
+  () => console.log("Connected to DB")
+);
 
 // Middlewares
 app.use(express.urlencoded({ extended: false }));

@@ -19,7 +19,7 @@ module.exports = {
 
   Validation: {
     //  Registration Validator
-    register: (schema) => {
+    validationBody: (schema) => {
       return (req, res, next) => {
         const result = schema.validate(req.body);
 
