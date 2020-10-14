@@ -2,5 +2,5 @@ POST http://localhost:5000/auth/users/register
 Content-Type: application/json
 
 {
-    "name":"makdoom shaikh"
+    "name":"makdoom shaiksh"
 }
