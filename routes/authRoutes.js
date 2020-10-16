@@ -1,7 +1,13 @@
 const router = require("express").Router();
+const JWT = require("jsonwebtoken");
 
 const User = require("../model/UserModel");
 const { Schemas, Validation } = require("../model/ValidationSchema");
+
+// Assigning a token
+const signToken = (user) => {
+  return JWT.sign({ id: user.id }, process.env.JWT_SECRET);
+};
 
 // Register Route
 router.post(
@@ -21,7 +27,10 @@ router.post(
 
       // Saving a user in db
       const savedUser = await newUser.save();
-      return res.status(200).json({ user: savedUser });
+
+      // Response with JWT token
+      const token = signToken(savedUser);
+      return res.status(200).json({ token, user: savedUser });
     } catch (error) {
       console.log(error);
     }
