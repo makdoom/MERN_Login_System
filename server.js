@@ -12,6 +12,7 @@ mongoose.connect(
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useCreateIndex: true,
   },
   () => console.log("Connected to DB")
 );
@@ -29,5 +30,5 @@ app.get("/", (req, res) => {
 app.use("/auth/users", require("./routes/authRoutes"));
 
 // Start server
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 9000;
 app.listen(port, () => console.log(`Server running at ${port}`));
