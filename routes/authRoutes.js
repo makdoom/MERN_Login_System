@@ -5,6 +5,10 @@ require("../passport");
 
 const User = require("../model/UserModel");
 const { Schemas, Validation } = require("../model/ValidationSchema");
+const registerValidation = Validation.validationBody(Schemas.register);
+const loginValidation = Validation.validationBody(Schemas.login);
+const passportLocal = passport.authenticate("local", { session: false });
+const passportJWT = passport.authenticate("jwt", { session: false });
 
 // Assigning a token
 const signToken = (user) => {
@@ -12,45 +16,39 @@ const signToken = (user) => {
 };
 
 // Register Route
-router.post(
-  "/register",
-  Validation.validationBody(Schemas.register),
-  async (req, res) => {
-    try {
-      const { name, email, password } = req.value.body;
+router.post("/register", registerValidation, async (req, res) => {
+  try {
+    const { name, email, password } = req.value.body;
 
-      // Check if it already exists or not
-      const existsUser = await User.findOne({ email });
-      if (existsUser)
-        return res.status(403).json({ error: "Email is already registered " });
+    // Check if it already exists or not
+    const existsUser = await User.findOne({ email });
+    if (existsUser)
+      return res.status(403).json({ error: "Email is already registered " });
 
-      // Creating a newUser
-      const newUser = new User({ name, email, password });
+    // Creating a newUser
+    const newUser = new User({ name, email, password });
 
-      // Saving a user in db
-      const savedUser = await newUser.save();
+    // Saving a user in db
+    const savedUser = await newUser.save();
 
-      // Response with JWT token
-      const token = signToken(savedUser);
-      return res.status(200).json({ token, user: savedUser });
-    } catch (error) {
-      console.log(error);
-    }
+    // Response with JWT token
+    const token = signToken(savedUser);
+    return res.status(200).json({ token, user: savedUser });
+  } catch (error) {
+    console.log(error);
   }
-);
+});
 
 // Login Route
-router.post("/login", Validation.validationBody(Schemas.login), (req, res) => {
-  res.send("Login ");
+router.post("/login", loginValidation, passportLocal, (req, res) => {
+  // Assigning a new token
+  const token = signToken(req.user);
+  return res.status(200).json({ token });
 });
 
 // Dashboard Route
-router.get(
-  "/dashboard",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    res.send("welcome to dashboard");
-  }
-);
+router.get("/dashboard", passportJWT, (req, res) => {
+  res.send("welcome to dashboard");
+});
 
 module.exports = router;
