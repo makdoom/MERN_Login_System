@@ -7,8 +7,7 @@ const User = require("../model/UserModel");
 const { Schemas, Validation } = require("../model/ValidationSchema");
 const registerValidation = Validation.validationBody(Schemas.register);
 const loginValidation = Validation.validationBody(Schemas.login);
-const passportLocal = passport.authenticate("local", { session: false });
-const passportJWT = passport.authenticate("jwt", { session: false });
+const { authLogin, authReg } = require("../middleware/auth");
 
 // Assigning a token
 const signToken = (user) => {
@@ -40,14 +39,14 @@ router.post("/register", registerValidation, async (req, res) => {
 });
 
 // Login Route
-router.post("/login", loginValidation, passportLocal, (req, res) => {
+router.post("/login", loginValidation, authLogin, (req, res) => {
   // Assigning a new token
   const token = signToken(req.user);
-  return res.status(200).json({ token });
+  return res.status(200).json({ token, user: req.user });
 });
 
 // Dashboard Route
-router.get("/dashboard", passportJWT, (req, res) => {
+router.get("/dashboard", authReg, (req, res) => {
   res.send("welcome to dashboard");
 });
 

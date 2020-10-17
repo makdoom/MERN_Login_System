@@ -14,11 +14,14 @@ passport.use(
     },
     async (payload, done) => {
       try {
-        //   Find user specifired in token
+        // Find user specifired in token
         const user = await User.findById(payload.id);
 
         // if user doesnt exist handle it
-        if (!user) return done(null, false);
+        if (!user)
+          return done(null, false, {
+            error: "Please login to access this page",
+          });
 
         // Otherwise handle it
         done(null, user);
@@ -41,13 +44,13 @@ passport.use(
         const user = await User.findOne({ email });
 
         // if it is found handle it
-        if (!user) return done(null, false);
+        if (!user) return done(null, false, { error: "User not found" });
 
         // Check the password
         const match = await user.validPassword(password);
 
         // if not match handle it
-        if (!match) return done(null, false);
+        if (!match) return done(null, false, { error: "Invalid Credentials" });
 
         // Otherwise handle it
         done(null, user);
