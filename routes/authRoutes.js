@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const JWT = require("jsonwebtoken");
+const passport = require("passport");
+require("../passport");
 
 const User = require("../model/UserModel");
 const { Schemas, Validation } = require("../model/ValidationSchema");
@@ -41,5 +43,14 @@ router.post(
 router.post("/login", Validation.validationBody(Schemas.login), (req, res) => {
   res.send("Login ");
 });
+
+// Dashboard Route
+router.get(
+  "/dashboard",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.send("welcome to dashboard");
+  }
+);
 
 module.exports = router;
