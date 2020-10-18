@@ -1,6 +1,11 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { login } from "../actions/action";
 
 const Home = () => {
+  // const user = useSelector((state) => state);
+  const dispatch = useDispatch();
+
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -8,7 +13,11 @@ const Home = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted", user);
+
+    // Here we need to call some action creator
+    dispatch(login(user));
+
+    console.log("Form submitted");
   };
   return (
     <div className="home">
