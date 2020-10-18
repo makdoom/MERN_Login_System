@@ -6,6 +6,7 @@ import Counter from "./components/Counter";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./components/Home";
 import Login from "./components/Login";
+import Register from "./components/Register";
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
         <Provider store={store}>
           <div className="app">
             <Route exact path="/login" component={Login} />
-            <Route exact path="/counter" component={Counter} />
+            <Route exact path="/register" component={Register} />
           </div>
         </Provider>
       </Switch>
