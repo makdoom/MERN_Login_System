@@ -9,11 +9,9 @@
 }
 
 .register__box {
-  /* padding: 50px 80px; */
   height: 550px;
   width: 400px;
   background: #3d3c3c;
-  /* border: 1px solid #fff; */
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.8);
 }
 
