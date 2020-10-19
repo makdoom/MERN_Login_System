@@ -3,6 +3,9 @@ import {
   DECREMENT,
   REGISTER_SUCCESS,
   REGISTER_ERROR,
+  LOGIN_SUCCESS,
+  LOGIN_ERROR,
+  CLEAR_ERROR,
 } from "./types";
 import axios from "axios";
 
@@ -38,13 +41,29 @@ export const login = (data) => {
         email: data.email,
         password: data.password,
       });
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: response.data,
+      });
       console.log(response);
     } catch (error) {
+      dispatch({
+        type: LOGIN_ERROR,
+        payload: error.response.data.error,
+      });
       console.log(error.response);
     }
   };
 };
 
+// Clear Error
+export const clearError = () => {
+  return (dispatch) => {
+    dispatch({
+      type: CLEAR_ERROR,
+    });
+  };
+};
 // Increment action Creator
 export const increment = () => {
   return {

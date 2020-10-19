@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { register } from "../actions/action";
 import "../stylesheets/register.css";
+import ErrorMessage from "./ErrorMessage";
 
 const Register = () => {
   // Store
@@ -27,9 +28,9 @@ const Register = () => {
   };
 
   // Handel Submit
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(register(user));
+    await dispatch(register(user));
     // console.log(currentUser);
   };
 
@@ -40,7 +41,7 @@ const Register = () => {
           <div className="register__header">
             <h2>Register</h2>
           </div>
-          {error}
+          {error && <ErrorMessage message={error} />}
           <div className="register__body">
             <input
               type="text"

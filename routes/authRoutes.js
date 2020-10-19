@@ -32,7 +32,7 @@ router.post("/register", registerValidation, async (req, res) => {
 
     // Response with JWT token
     const token = signToken(savedUser);
-    res.redirect("/dashboard");
+    // res.redirect("/dashboard");
     return res.status(200).json({ token, user: savedUser });
   } catch (error) {
     console.log(error);

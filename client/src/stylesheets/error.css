@@ -1,0 +1,25 @@
+.error {
+  display: flex;
+  align-items: center;
+  padding: 10px 25px;
+  border-radius: 30px;
+  background: #ff1212;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.error__message span {
+  font-size: 0.9rem;
+}
+
+.error__clear {
+  margin-left: 1rem;
+}
+
+.error__clear .clear__btn {
+  padding: 3px 6px;
+  border-radius: 100%;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}

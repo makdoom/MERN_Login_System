@@ -1,7 +1,17 @@
-import { REGISTER_ERROR, REGISTER_SUCCESS } from "../actions/types";
+import {
+  REGISTER_ERROR,
+  REGISTER_SUCCESS,
+  LOGIN_SUCCESS,
+  LOGIN_ERROR,
+  CLEAR_ERROR,
+} from "../actions/types";
 
 // initialstate
 const initialState = {
+  user: {
+    name: "",
+    email: "",
+  },
   isAuthenticated: false,
   token: "",
   error: "",
@@ -15,6 +25,10 @@ const authReducer = (state = initialState, action) => {
         ...state,
         isAuthenticated: true,
         token: action.payload.token,
+        user: {
+          name: action.payload.user.name,
+          email: action.payload.user.email,
+        },
         error: "",
       };
 
@@ -22,6 +36,30 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload,
+      };
+
+    case LOGIN_SUCCESS:
+      return {
+        ...state,
+        isAuthenticated: true,
+        token: action.payload.token,
+        user: {
+          name: action.payload.user.name,
+          email: action.payload.user.email,
+        },
+        error: "",
+      };
+
+    case LOGIN_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+      };
+
+    case CLEAR_ERROR:
+      return {
+        ...state,
+        error: "",
       };
 
     default:
