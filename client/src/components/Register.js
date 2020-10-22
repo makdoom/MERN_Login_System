@@ -1,18 +1,26 @@
 import React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { register } from "../actions/action";
+import axios from "axios";
 import "../stylesheets/register.css";
 import ErrorMessage from "./ErrorMessage";
+import {
+  INCREMENT,
+  DECREMENT,
+  REGISTER_SUCCESS,
+  REGISTER_ERROR,
+  LOGIN_SUCCESS,
+  LOGIN_ERROR,
+  CLEAR_ERROR,
+} from "../actions/types";
 
 const Register = () => {
   // Store
   const error = useSelector((state) => state.auth.error);
-  // console.log("Current User: ", currentUser);
-
-  // Dispatch
   const dispatch = useDispatch();
+  const history = useHistory();
 
   // Local user object
   const [user, setUser] = useState({
@@ -27,10 +35,37 @@ const Register = () => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
+  // Register a user
+  const getRegister = (data) => {
+    return async (dispatch) => {
+      try {
+        const response = await axios.post("/auth/users/register", {
+          name: data.name,
+          email: data.email,
+          password: data.password,
+          confirmPassword: data.confirmPassword,
+        });
+        dispatch({
+          type: REGISTER_SUCCESS,
+          payload: response.data,
+        });
+        history.push("/dashboard");
+      } catch (error) {
+        dispatch({
+          type: REGISTER_ERROR,
+          payload: error.response.data.error,
+        });
+        console.log(error.response);
+      }
+    };
+  };
+
   // Handel Submit
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    await dispatch(register(user));
+
+    dispatch(getRegister(user));
+    // if (!error) history.push("/dashboard");
     // console.log(currentUser);
   };
 

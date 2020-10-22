@@ -19,6 +19,7 @@ const initialState = {
 
 // Reducer
 const authReducer = (state = initialState, action) => {
+  console.log(action.payload);
   switch (action.type) {
     case REGISTER_SUCCESS:
       return {
@@ -59,6 +60,7 @@ const authReducer = (state = initialState, action) => {
     case CLEAR_ERROR:
       return {
         ...state,
+        isAuthenticated: false,
         error: "",
       };
 
