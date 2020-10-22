@@ -45,11 +45,21 @@ const Register = () => {
           password: data.password,
           confirmPassword: data.confirmPassword,
         });
+        // console.log(response);
         dispatch({
           type: REGISTER_SUCCESS,
           payload: response.data,
         });
-        history.push("/dashboard");
+
+        localStorage.setItem("token", response.data.token);
+        // Requesting for Secret page
+        const result = await axios.get("auth/users/dashboard", {
+          headers: {
+            authorization: response.data.token,
+          },
+        });
+        console.log(result);
+        if (result.status === 200) history.push("/dashboard");
       } catch (error) {
         dispatch({
           type: REGISTER_ERROR,
