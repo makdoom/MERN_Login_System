@@ -1,6 +1,6 @@
 const passport = require("passport");
 const JwtStrategy = require("passport-jwt").Strategy;
-const { ExtractJwt, Strategy } = require("passport-jwt");
+const { ExtractJwt } = require("passport-jwt");
 const LocalStrategy = require("passport-local");
 
 const User = require("./model/UserModel");
@@ -19,9 +19,7 @@ passport.use(
 
         // if user doesnt exist handle it
         if (!user)
-          return done(null, false, {
-            error: "Please login to access this page",
-          });
+          return done(null, false, { error: "Please register yourself " });
 
         // Otherwise handle it
         done(null, user);
@@ -43,7 +41,7 @@ passport.use(
         // Find the user specified in email
         const user = await User.findOne({ email });
 
-        // if it is found handle it
+        // if it is not found handle it
         if (!user) return done(null, false, { error: "User not found" });
 
         // Check the password

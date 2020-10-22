@@ -48,7 +48,7 @@ router.post("/login", loginValidation, authLogin, (req, res) => {
 
 // Dashboard Route
 router.get("/dashboard", authReg, (req, res) => {
-  res.send("welcome to dashboard");
+  res.status(200).send("welcome");
 });
 
 module.exports = router;

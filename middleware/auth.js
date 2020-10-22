@@ -1,4 +1,5 @@
 const passport = require("passport");
+require("../passport");
 
 module.exports = {
   // AuthLogin middleware
