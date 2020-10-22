@@ -1,14 +1,17 @@
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
+import { LOGIN_SUCCESS, LOGIN_ERROR } from "../actions/types";
 import "../stylesheets/login.css";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../actions/action";
+import axios from "axios";
+import ErrorMessage from "./ErrorMessage";
 
 const Login = () => {
   // Dispatch
   const dispatch = useDispatch();
   const history = useHistory();
+  const error = useSelector((state) => state.auth.error);
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -19,12 +22,45 @@ const Login = () => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(user);
-    await dispatch(login(user));
-    history.push("/dashboard");
+  // Login a user
+  const getLogin = (data) => {
+    return async (dispatch) => {
+      try {
+        const response = await axios.post("/auth/users/login", {
+          email: data.email,
+          password: data.password,
+        });
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: response.data,
+        });
+        console.log(response);
+
+        // Get token from localStorage
+        const token = localStorage.getItem("token");
+
+        // Requesting for Secret page
+        const result = await axios.get("auth/users/dashboard", {
+          headers: {
+            authorization: token,
+          },
+        });
+        console.log(result);
+        if (result.status === 200) history.push("/dashboard");
+      } catch (error) {
+        dispatch({
+          type: LOGIN_ERROR,
+          payload: error.response.data.error,
+        });
+        console.log(error.response);
+      }
+    };
   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(getLogin(user));
+  };
+
   return (
     <div className="login">
       <div className="login__box">
@@ -32,7 +68,7 @@ const Login = () => {
           <div className="login__header">
             <h2>Login</h2>
           </div>
-          {/* {error && <ErrorMessage message={error} />} */}
+          {error && <ErrorMessage message={error} />}
           <div className="login__body">
             <input
               type="email"

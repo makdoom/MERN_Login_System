@@ -2,22 +2,12 @@ import React from "react";
 import { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { register } from "../actions/action";
+import { REGISTER_SUCCESS, REGISTER_ERROR } from "../actions/types";
+import ErrorMessage from "./ErrorMessage";
 import axios from "axios";
 import "../stylesheets/register.css";
-import ErrorMessage from "./ErrorMessage";
-import {
-  INCREMENT,
-  DECREMENT,
-  REGISTER_SUCCESS,
-  REGISTER_ERROR,
-  LOGIN_SUCCESS,
-  LOGIN_ERROR,
-  CLEAR_ERROR,
-} from "../actions/types";
 
 const Register = () => {
-  // Store
   const error = useSelector((state) => state.auth.error);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -51,7 +41,9 @@ const Register = () => {
           payload: response.data,
         });
 
+        // Storing token in localStorage
         localStorage.setItem("token", response.data.token);
+
         // Requesting for Secret page
         const result = await axios.get("auth/users/dashboard", {
           headers: {
@@ -73,10 +65,7 @@ const Register = () => {
   // Handel Submit
   const handleSubmit = (e) => {
     e.preventDefault();
-
     dispatch(getRegister(user));
-    // if (!error) history.push("/dashboard");
-    // console.log(currentUser);
   };
 
   return (
