@@ -11,7 +11,7 @@ const Login = () => {
   // Dispatch
   const dispatch = useDispatch();
   const history = useHistory();
-  const error = useSelector((state) => state.auth.error);
+  const authUser = useSelector((state) => state.auth);
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -34,10 +34,9 @@ const Login = () => {
           type: LOGIN_SUCCESS,
           payload: response.data,
         });
-        console.log(response);
 
         // Get token from localStorage
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token") || response.data.token;
 
         // Requesting for Secret page
         const result = await axios.get("auth/users/dashboard", {
@@ -45,14 +44,12 @@ const Login = () => {
             authorization: token,
           },
         });
-        console.log(result);
         if (result.status === 200) history.push("/dashboard");
       } catch (error) {
         dispatch({
           type: LOGIN_ERROR,
           payload: error.response.data.error,
         });
-        console.log(error.response);
       }
     };
   };
@@ -68,7 +65,7 @@ const Login = () => {
           <div className="login__header">
             <h2>Login</h2>
           </div>
-          {error && <ErrorMessage message={error} />}
+          {authUser.error && <ErrorMessage message={authUser.error} />}
           <div className="login__body">
             <input
               type="email"

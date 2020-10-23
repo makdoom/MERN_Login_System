@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { clearEror, clearError } from "../actions/action";
+import { clearError } from "../actions/action";
 import "../stylesheets/error.css";
 
 const ErrorMessage = ({ message }) => {
@@ -11,7 +11,6 @@ const ErrorMessage = ({ message }) => {
   const handleClear = (e) => {
     e.preventDefault();
     dispatch(clearError());
-    console.log("Clear");
   };
   return (
     <div className="error">

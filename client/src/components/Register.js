@@ -35,7 +35,6 @@ const Register = () => {
           password: data.password,
           confirmPassword: data.confirmPassword,
         });
-        // console.log(response);
         dispatch({
           type: REGISTER_SUCCESS,
           payload: response.data,
@@ -50,14 +49,12 @@ const Register = () => {
             authorization: response.data.token,
           },
         });
-        console.log(result);
         if (result.status === 200) history.push("/dashboard");
       } catch (error) {
         dispatch({
           type: REGISTER_ERROR,
           payload: error.response.data.error,
         });
-        console.log(error.response);
       }
     };
   };

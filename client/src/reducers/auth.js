@@ -4,6 +4,7 @@ import {
   LOGIN_SUCCESS,
   LOGIN_ERROR,
   CLEAR_ERROR,
+  LOGOUT,
 } from "../actions/types";
 
 // initialstate
@@ -61,6 +62,15 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         isAuthenticated: false,
+        error: "",
+      };
+
+    case LOGOUT:
+      return {
+        ...state,
+        isAuthenticated: false,
+        user: { name: "", email: "" },
+        token: "",
         error: "",
       };
 

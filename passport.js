@@ -42,7 +42,10 @@ passport.use(
         const user = await User.findOne({ email });
 
         // if it is not found handle it
-        if (!user) return done(null, false, { error: "User not found" });
+        if (!user)
+          return done(null, false, {
+            error: "Please register yourself first ",
+          });
 
         // Check the password
         const match = await user.validPassword(password);

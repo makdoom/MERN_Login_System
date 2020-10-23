@@ -13,11 +13,7 @@ const Home = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-
-    // Here we need to call some action creator
     dispatch(login(user));
-
-    console.log("Form submitted");
   };
   return (
     <div className="home">
