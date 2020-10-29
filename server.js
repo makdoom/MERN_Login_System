@@ -18,6 +18,14 @@ mongoose.connect(
   () => console.log("Connected to DB", mongoose.connection.readyState)
 );
 
+// Serve static file in production
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+  });
+}
+
 // Middlewares
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -26,13 +34,7 @@ app.use(morgan("dev"));
 // Routes
 app.use("/auth/users", require("./routes/authRoutes"));
 
-// Serve static file in production
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-  });
-}
+
 // Start server
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server running at ${port}`));

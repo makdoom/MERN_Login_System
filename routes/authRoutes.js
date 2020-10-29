@@ -7,7 +7,8 @@ const User = require("../model/UserModel");
 const { Schemas, Validation } = require("../model/ValidationSchema");
 const registerValidation = Validation.validationBody(Schemas.register);
 const loginValidation = Validation.validationBody(Schemas.login);
-const { authLogin, authReg } = require("../middleware/auth");
+const { authLogin } = require("../middleware/auth");
+const passportJWT = passport.authenticate("jwt", { session: false });
 
 // Assigning a token
 const signToken = (user) => {
@@ -47,7 +48,7 @@ router.post("/login", loginValidation, authLogin, (req, res) => {
 });
 
 // Dashboard Route
-router.get("/dashboard", authReg, (req, res) => {
+router.get("/dashboard", passportJWT, (req, res) => {
   res.status(200).send("welcome");
 });
 
