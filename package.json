@@ -10,7 +10,7 @@
     "client": "npm start --prefix client",
     "start":"node server.js",
     "dev": "concurrently \"npm run server \" \"npm run client \"",
-    "heroku-postbuild": "cd client && npm install && npm run build"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "author": "Makdoom Shaikh",
   "license": "MIT",
